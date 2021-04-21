@@ -1,0 +1,51 @@
+[
+  {
+    "name": "editor",
+    "path": "/editor",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\editor\\\\index.vue",
+    "chunkName": "pages/editor/index",
+    "_name": "_7a0be3cb"
+  },
+  {
+    "name": "settings",
+    "path": "/settings",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\settings\\\\index.vue",
+    "chunkName": "pages/settings/index",
+    "_name": "_09bd9056"
+  },
+  {
+    "name": "sign-in",
+    "path": "/sign-in",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\sign-in\\\\index.vue",
+    "chunkName": "pages/sign-in/index",
+    "_name": "_ccf9cc32"
+  },
+  {
+    "name": "sign-up",
+    "path": "/sign-up",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\sign-up\\\\index.vue",
+    "chunkName": "pages/sign-up/index",
+    "_name": "_51ea9a9e"
+  },
+  {
+    "name": "article-title",
+    "path": "/article/:title?",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\article\\\\_title.vue",
+    "chunkName": "pages/article/_title",
+    "_name": "_1fc12856"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_6748a4d8"
+  },
+  {
+    "name": "username",
+    "path": "/:username",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\_username.vue",
+    "chunkName": "pages/_username",
+    "_name": "_4e9be5bb"
+  }
+]
