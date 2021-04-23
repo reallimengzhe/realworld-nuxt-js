@@ -47,6 +47,10 @@
               </button>
             </fieldset>
           </form>
+          <hr />
+          <button class="btn btn-outline-danger" @click="handleLogout">
+            Or click here to logout.
+          </button>
         </div>
       </div>
     </div>
@@ -54,7 +58,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "Settings",
+  methods: {
+    // 登出
+    handleLogout() {
+      // 清除 token
+      window.localStorage.removeItem("jwtToken");
+      // 跳转至首页
+      this.$router.push("/");
+    },
+  },
+};
 </script>
 
 <style>

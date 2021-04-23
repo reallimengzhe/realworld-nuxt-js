@@ -3,27 +3,56 @@
     <!-- 导航栏 -->
     <nav class="navbar navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="index.html">conduit</a>
+        <NuxtLink class="navbar-brand" to="/">conduit</NuxtLink>
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <!-- Add "active" class when you're on that page" -->
-            <nuxt-link class="nav-link active" to="/">Home</nuxt-link>
+            <NuxtLink
+              to="/"
+              :class="['nav-link', { active: $route.path === '/' }]"
+            >
+              Home
+            </NuxtLink>
           </li>
-          <li class="nav-item">
-            <nuxt-link class="nav-link" to="/editor">
+          <li class="nav-item" v-show="isSignedIn">
+            <NuxtLink
+              to="/editor"
+              :class="['nav-link', { active: $route.path === '/editor' }]"
+            >
               <i class="ion-compose"></i>&nbsp;New Post
-            </nuxt-link>
+            </NuxtLink>
           </li>
-          <li class="nav-item">
-            <nuxt-link class="nav-link" to="/settings">
+          <li class="nav-item" v-show="isSignedIn">
+            <NuxtLink
+              to="/settings"
+              :class="['nav-link', { active: $route.path === '/settings' }]"
+            >
               <i class="ion-gear-a"></i>&nbsp;Settings
-            </nuxt-link>
+            </NuxtLink>
           </li>
-          <li class="nav-item">
-            <nuxt-link class="nav-link" to="/sign-in">Sign in</nuxt-link>
+          <li class="nav-item" v-show="!isSignedIn">
+            <NuxtLink
+              to="/sign-in"
+              :class="['nav-link', { active: $route.path === '/sign-in' }]"
+            >
+              Sign in
+            </NuxtLink>
           </li>
-          <li class="nav-item">
-            <nuxt-link class="nav-link" to="/sign-up">Sign up</nuxt-link>
+          <li class="nav-item" v-show="!isSignedIn">
+            <NuxtLink
+              to="/sign-up"
+              :class="['nav-link', { active: $route.path === '/sign-up' }]"
+            >
+              Sign up
+            </NuxtLink>
+          </li>
+          <li class="nav-item" v-show="isSignedIn">
+            <NuxtLink
+              to="/limengzhe"
+              :class="['nav-link', { active: $route.path === '/limengzhe' }]"
+            >
+              limengzhe
+            </NuxtLink>
           </li>
         </ul>
       </div>
@@ -41,12 +70,26 @@
         </span>
       </div>
     </footer>
-    <!-- /页脚  -->
+    <!-- end  -->
   </div>
 </template>
 
 <script>
-export default { name: "Layout" };
+export default {
+  name: "Layout",
+  data() {
+    return { isSignedIn: false };
+  },
+  watch: {
+    $route() {
+      this.isSignedIn = !!(
+        process.client &&
+        localStorage &&
+        localStorage.getItem("jwtToken")
+      );
+    },
+  },
+};
 </script>
 
 <style>
