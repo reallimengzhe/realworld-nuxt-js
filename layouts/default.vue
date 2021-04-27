@@ -19,7 +19,7 @@
               to="/editor"
               :class="['nav-link', { active: $route.path === '/editor' }]"
             >
-              <i class="ion-compose"></i>&nbsp;New Post
+              <i class="ion-compose"></i>&nbsp;New Article
             </NuxtLink>
           </li>
           <li class="nav-item" v-show="isSignedIn">
@@ -48,10 +48,14 @@
           </li>
           <li class="nav-item" v-show="isSignedIn">
             <NuxtLink
-              to="/limengzhe"
-              :class="['nav-link', { active: $route.path === '/limengzhe' }]"
+              :to="'/@' + UserInfo.username"
+              :class="[
+                'nav-link',
+                { active: $route.path === '/@' + UserInfo.username },
+              ]"
             >
-              limengzhe
+              <img class="user-pic" :src="UserInfo.image" />
+              {{ UserInfo.username }}
             </NuxtLink>
           </li>
         </ul>
@@ -75,22 +79,15 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Layout",
-  data() {
-    return { isSignedIn: false };
-  },
-  watch: {
-    $route() {
-      this.isSignedIn = !!(
-        process.client &&
-        localStorage &&
-        localStorage.getItem("jwtToken")
-      );
+  computed: {
+    ...mapState(["UserInfo"]),
+    //
+    isSignedIn() {
+      return "token" in this.UserInfo;
     },
   },
 };
 </script>
-
-<style>
-</style>

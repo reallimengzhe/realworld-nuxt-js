@@ -1,10 +1,10 @@
 export default function({ $axios }) {
   // 设置 请求 token
-  process.client &&
-    localStorage &&
-    localStorage['jwtToken'] &&
-    $axios.setToken(localStorage['jwtToken'], 'Token')
-
+  $axios.onRequest(() => {
+    process.client &&
+      localStorage['jwtToken'] &&
+      $axios.setToken(localStorage['jwtToken'], 'Token')
+  })
   // // onResponse
   // $axios.onResponse(response => {
   //   const { status } = response

@@ -14,7 +14,7 @@
             </li>
           </ul>
 
-          <form @submit.prevent="handleSubmit">
+          <form @submit.prevent="handleSignIn">
             <fieldset class="form-group">
               <input
                 required
@@ -22,7 +22,7 @@
                 placeholder="Email"
                 class="form-control form-control-lg"
                 v-model="user.email"
-                :disabled="isLoggingIn"
+                :disabled="signInLoading"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -32,12 +32,12 @@
                 placeholder="Password"
                 class="form-control form-control-lg"
                 v-model="user.password"
-                :disabled="isLoggingIn"
+                :disabled="signInLoading"
               />
             </fieldset>
             <button
               class="btn btn-lg btn-primary pull-xs-right"
-              :disabled="isLoggingIn"
+              :disabled="signInLoading"
             >
               Sign in
             </button>
@@ -59,7 +59,7 @@ export default {
       // 登录失败原因提示
       errorVisible: false,
       //
-      isLoggingIn: false,
+      signInLoading: false,
       //
       errorList: {},
     };
@@ -67,30 +67,28 @@ export default {
   //
   methods: {
     //
-    handleSubmit() {
-      this.isLoggingIn = true;
+    handleSignIn() {
+      this.signInLoading = true;
       this.errorVisible = false;
       //
       this.$axios
         .post("/users/login", {
           user: this.user,
         })
-        .then((res) => {
-          console.log(res);
+        .then(({ data }) => {
           // 保存用户信息
-          const { user } = res.data;
-          localStorage && localStorage.setItem("jwtToken", user.token);
+          const { token } = data.user;
+          localStorage.setItem("jwtToken", token);
 
           // 跳转至首页
           this.$router.push("/");
         })
-        .catch((error) => {
-          const { errors } = error;
+        .catch(({ errors }) => {
           this.errorList = errors;
           this.errorVisible = true;
         })
         .finally(() => {
-          this.isLoggingIn = false;
+          this.signInLoading = false;
         });
     },
   },

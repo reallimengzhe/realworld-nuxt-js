@@ -3,42 +3,56 @@
     "name": "editor",
     "path": "/editor",
     "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\editor\\\\index.vue",
-    "chunkName": "pages/editor/index"
+    "chunkName": "pages/editor/index",
+    "_name": "_7a0be3cb"
   },
   {
     "name": "settings",
     "path": "/settings",
     "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\settings\\\\index.vue",
-    "chunkName": "pages/settings/index"
+    "chunkName": "pages/settings/index",
+    "_name": "_09bd9056"
   },
   {
     "name": "sign-in",
     "path": "/sign-in",
     "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\sign-in\\\\index.vue",
-    "chunkName": "pages/sign-in/index"
+    "chunkName": "pages/sign-in/index",
+    "_name": "_ccf9cc32"
   },
   {
     "name": "sign-up",
     "path": "/sign-up",
     "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\sign-up\\\\index.vue",
-    "chunkName": "pages/sign-up/index"
+    "chunkName": "pages/sign-up/index",
+    "_name": "_51ea9a9e"
   },
   {
-    "name": "article-title",
-    "path": "/article/:title?",
-    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\article\\\\_title.vue",
-    "chunkName": "pages/article/_title"
+    "name": "article-slug",
+    "path": "/article/:slug?",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\article\\\\_slug.vue",
+    "chunkName": "pages/article/_slug",
+    "_name": "_79b55c3e"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_6748a4d8"
   },
   {
     "name": "username",
     "path": "/:username",
-    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\_username.vue",
-    "chunkName": "pages/_username"
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\_username\\\\index.vue",
+    "chunkName": "pages/_username/index",
+    "_name": "_6df69667"
+  },
+  {
+    "name": "username-favorites",
+    "path": "/:username/favorites",
+    "component": "C:\\\\Users\\\\admin\\\\Desktop\\\\realworld-nuxt-js\\\\pages\\\\_username\\\\favorites.vue",
+    "chunkName": "pages/_username/favorites",
+    "_name": "_de4f7228"
   }
 ]

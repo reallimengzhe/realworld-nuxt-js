@@ -1,1 +1,8 @@
-{}
+{
+  "ArticlePreview": {
+    "description": "Auto imported from components/article-preview.vue"
+  },
+  "AuthorBanner": {
+    "description": "Auto imported from components/author-banner.vue"
+  }
+}

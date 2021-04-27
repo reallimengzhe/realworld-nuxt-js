@@ -12,57 +12,58 @@
         <div class="col-md-9">
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
-              <li class="nav-item">
-                <a class="nav-link disabled" href="">Your Feed</a>
+              <li class="nav-item" v-show="isSignedIn">
+                <a
+                  :class="['nav-link', { active: currentFeed === 'Your' }]"
+                  @click="handleChangeFeed('Your')"
+                >
+                  Your Feed
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="">Global Feed</a>
+                <span
+                  :class="['nav-link', { active: currentFeed === 'Global' }]"
+                  @click="handleChangeFeed('Global')"
+                >
+                  Global Feed
+                </span>
+              </li>
+              <li class="nav-item" v-show="currentFeed === 'Tag'">
+                <a
+                  :class="['nav-link', { active: currentFeed === 'Tag' }]"
+                  @click="handleChangeFeed('Global')"
+                >
+                  <i class="ion-pound" />&nbsp;
+                  {{ currentTag }}
+                </a>
               </li>
             </ul>
           </div>
-
-          <div class="article-preview">
-            <div class="article-meta">
-              <a href="profile.html"
-                ><img src="http://i.imgur.com/Qr71crq.jpg"
-              /></a>
-              <div class="info">
-                <a href="" class="author">Eric Simons</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 29
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>How to build webapps that scale</h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-            </a>
+          <div class="article-preview" v-show="feedLoading">
+            Loading articles...
           </div>
-
-          <div class="article-preview">
-            <div class="article-meta">
-              <a href="profile.html"
-                ><img src="http://i.imgur.com/N4VcUeJ.jpg"
-              /></a>
-              <div class="info">
-                <a href="" class="author">Albert Pai</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 32
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>
-                The song you won't ever stop singing. No matter how hard you
-                try.
-              </h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-            </a>
+          <div
+            class="article-preview"
+            v-show="!feedLoading && articles.length < 1"
+          >
+            No articles are here... yet.
           </div>
+          <ArticlePreview
+            v-for="article in articles"
+            :key="article.slug"
+            :data="article"
+          />
+          <nav>
+            <ul class="pagination">
+              <li
+                v-for="pageNumber in Math.ceil(articlesCount / pageLimit)"
+                :class="['page-item', { active: pageNumber === pageIndex }]"
+                @click="handleCheckPage(pageNumber)"
+              >
+                <a class="page-link">{{ pageNumber }}</a>
+              </li>
+            </ul>
+          </nav>
         </div>
 
         <div class="col-md-3">
@@ -70,14 +71,14 @@
             <p>Popular Tags</p>
 
             <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+              <a
+                class="tag-pill tag-default"
+                v-for="tag in tags"
+                :key="tag"
+                @click="handleCheckTag(tag)"
+              >
+                {{ tag }}
+              </a>
             </div>
           </div>
         </div>
@@ -90,25 +91,95 @@
 export default {
   name: "Home",
   async asyncData({ $axios }) {
-    // const data = await $axios.$get("articles?limit=10&offset=0");
-    // console.log(data);
-    // return { data };
+    // Popular Tags
+    const { tags } = await $axios.$get("tags");
+    // return
+    return { tags };
+  },
+  data() {
+    return {
+      // 是否已登录
+      isSignedIn: false,
+      //
+      currentFeed: "Global",
+      //
+      articles: [],
+      articlesCount: 0,
+      //
+      pageLimit: 10,
+      pageIndex: 1,
+      //
+      currentTag: null,
+      //
+      feedLoading: false,
+    };
+  },
+  watch: {
+    // $route: {
+    //   // 立即执行
+    //   immediate: true,
+    //   // 回调
+    //   handler() {
+    //     console.log(1);
+    //   },
+    //   // end
+    // },
   },
   created() {
-    this.$axios
-      .$get("articles", {
-        params: {
-          limit: 10,
-          offset: 0,
-        },
-      })
-      .then((res) => {
-        // console.log(res);
-      });
+    this.isSignedIn = !!(process.client && localStorage.getItem("jwtToken"));
+    this.isSignedIn
+      ? this.handleChangeFeed("Your")
+      : this.handleChangeFeed("Global");
   },
-  methods: {},
+  methods: {
+    // 切换 tab
+    handleChangeFeed(feed) {
+      this.currentTag = null;
+      this.currentFeed = feed;
+      this.handleGetFeed();
+    },
+    // 获取文章流
+    handleGetFeed() {
+      this.feedLoading = true;
+      this.articles = [];
+      this.articlesCount = 0;
+      // 请求参数
+      let params = {
+        limit: this.pageLimit,
+        offset: (this.pageIndex - 1) * this.pageLimit,
+        tag: this.currentTag,
+        author: null,
+        favorited: null,
+      };
+      // 请求对象
+      let request = undefined;
+      //
+      if (this.currentFeed === "Global" || this.currentFeed === "Tag")
+        request = this.$axios.$get("articles", { params });
+      if (this.currentFeed === "Your")
+        request = this.$axios.$get("articles/feed", { params });
+
+      request
+        .then(({ articles, articlesCount }) => {
+          this.articles = articles;
+          this.articlesCount = articlesCount;
+        })
+        .finally(() => {
+          this.feedLoading = false;
+        });
+    },
+    // 选择页码
+    handleCheckPage(index) {
+      this.pageIndex = index;
+      this.handleGetFeed();
+    },
+    // 选择标签
+    handleCheckTag(tag) {
+      this.currentFeed = "Tag";
+      this.currentTag = tag;
+
+      this.handleGetFeed();
+    },
+  },
 };
 </script>
-
-<style>
-</style>

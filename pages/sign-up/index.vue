@@ -22,7 +22,7 @@
                 placeholder="Your Name"
                 class="form-control form-control-lg"
                 v-model="user.username"
-                :disabled="isRegistering"
+                :disabled="signUpLoading"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -32,7 +32,7 @@
                 placeholder="Email"
                 class="form-control form-control-lg"
                 v-model="user.email"
-                :disabled="isRegistering"
+                :disabled="signUpLoading"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -42,12 +42,12 @@
                 placeholder="Password"
                 class="form-control form-control-lg"
                 v-model="user.password"
-                :disabled="isRegistering"
+                :disabled="signUpLoading"
               />
             </fieldset>
             <button
               class="btn btn-lg btn-primary pull-xs-right"
-              :disabled="isRegistering"
+              :disabled="signUpLoading"
             >
               Sign up
             </button>
@@ -71,7 +71,7 @@ export default {
       // 错误
       errorVisible: false,
       // 正在注册
-      isRegistering: false,
+      signUpLoading: false,
       // 错误列表
       errorList: {},
     };
@@ -79,17 +79,17 @@ export default {
   methods: {
     //
     handleSignUp() {
-      this.isRegistering = true;
+      this.signUpLoading = true;
       this.errorVisible = false;
       //
       this.$axios
         .post("/users", {
           user: this.user,
         })
-        .then((res) => {
+        .then(({ data }) => {
           // 保存用户信息
-          const { user } = res.data;
-          localStorage && localStorage.setItem("jwtToken", user.token);
+          const { token } = data.user;
+          localStorage.setItem("jwtToken", token);
 
           // 跳转至登录页
           this.$router.push("/");
@@ -100,7 +100,7 @@ export default {
           this.errorVisible = true;
         })
         .finally(() => {
-          this.isRegistering = false;
+          this.signUpLoading = false;
         });
     },
   },
