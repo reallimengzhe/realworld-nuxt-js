@@ -1,0 +1,29 @@
+{
+  "entry": "server.js",
+  "files": {
+    "components/article-preview.js": "components/article-preview.js",
+    "components/author-banner.js": "components/author-banner.js",
+    "pages/_username/favorites.js": "pages/_username/favorites.js",
+    "pages/_username/index.js": "pages/_username/index.js",
+    "pages/article/_slug.js": "pages/article/_slug.js",
+    "pages/editor/index.js": "pages/editor/index.js",
+    "pages/index.js": "pages/index.js",
+    "pages/settings/index.js": "pages/settings/index.js",
+    "pages/sign-in/index.js": "pages/sign-in/index.js",
+    "pages/sign-up/index.js": "pages/sign-up/index.js",
+    "server.js": "server.js"
+  },
+  "maps": {
+    "components/article-preview.js": "components/article-preview.js.map",
+    "components/author-banner.js": "components/author-banner.js.map",
+    "pages/_username/favorites.js": "pages/_username/favorites.js.map",
+    "pages/_username/index.js": "pages/_username/index.js.map",
+    "pages/article/_slug.js": "pages/article/_slug.js.map",
+    "pages/editor/index.js": "pages/editor/index.js.map",
+    "pages/index.js": "pages/index.js.map",
+    "pages/settings/index.js": "pages/settings/index.js.map",
+    "pages/sign-in/index.js": "pages/sign-in/index.js.map",
+    "pages/sign-up/index.js": "pages/sign-up/index.js.map",
+    "server.js": "server.js.map"
+  }
+}

@@ -47,8 +47,12 @@ export default {
   //
   axios: { baseURL: 'https://conduit.productionready.io/api' },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
   // Router property -  https://nuxtjs.org/docs/2.x/features/file-system-routing#the-router-property
   router: {},
+
+  // Build Configuration: https://go.nuxtjs.dev/config-build
+  build: {},
+
+  //
+  server: { host: '0.0.0.0', port: 3000 },
 }
