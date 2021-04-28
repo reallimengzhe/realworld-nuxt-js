@@ -92,9 +92,13 @@ export default {
   name: "Home",
   async asyncData({ $axios }) {
     // Popular Tags
-    const { tags } = await $axios.$get("tags");
-    // return
-    return { tags };
+    try {
+      let { tags } = await $axios.$get("tags");
+      return { tags };
+    } catch {
+      let tags = [];
+      return { tags };
+    }
   },
   data() {
     return {

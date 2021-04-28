@@ -3,7 +3,7 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-10 offset-md-1 col-xs-12">
-          <form @submit.prevent="handleSubmitArticle">
+          <form @submit.prevent="handlePublishArticle">
             <fieldset>
               <fieldset class="form-group">
                 <input
@@ -11,7 +11,7 @@
                   type="text"
                   class="form-control form-control-lg"
                   placeholder="Article Title"
-                  :disabled="submitLoading"
+                  :disabled="publishLoading"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -20,7 +20,7 @@
                   type="text"
                   class="form-control"
                   placeholder="What's this article about?"
-                  :disabled="submitLoading"
+                  :disabled="publishLoading"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -29,7 +29,7 @@
                   class="form-control"
                   rows="8"
                   placeholder="Write your article (in markdown)"
-                  :disabled="submitLoading"
+                  :disabled="publishLoading"
                 ></textarea>
               </fieldset>
               <fieldset class="form-group">
@@ -38,7 +38,7 @@
                   type="text"
                   class="form-control"
                   placeholder="Enter tags"
-                  :disabled="submitLoading"
+                  :disabled="publishLoading"
                   @keyup.enter="handlePushTag"
                 />
                 <div class="tag-list">
@@ -46,10 +46,7 @@
                     v-for="tag in article.tagList"
                     class="tag-default tag-pill ng-binding ng-scope"
                   >
-                    <i
-                      class="ion-close-round"
-                      @click="handleRemoveTag(tag)"
-                    ></i>
+                    <i class="ion-close-round" @click="handleRemoveTag(tag)" />
                     {{ tag }}
                   </span>
                 </div>
@@ -57,8 +54,8 @@
               <button
                 class="btn btn-lg pull-xs-right btn-primary"
                 type="button"
-                :disabled="submitLoading"
-                @click="handleSubmitArticle"
+                :disabled="publishLoading"
+                @click="handlePublishArticle"
               >
                 Publish Article
               </button>
@@ -79,15 +76,15 @@ export default {
       slug: "",
       //
       article: {
-        title: "How to train your dragon",
-        description: "Ever wonder how?",
-        body: "You have to believe",
-        tagList: ["reactjs", "angularjs", "dragons"],
+        title: "",
+        description: "",
+        body: "",
+        tagList: [],
       },
       //
       tag: "",
       //
-      submitLoading: false,
+      publishLoading: false,
     };
   },
   created() {
@@ -115,20 +112,17 @@ export default {
       if (index) this.article.tagList.splice(index, 1);
     },
     // 发表文章
-    handleSubmitArticle() {
-      this.submitLoading = true;
+    handlePublishArticle() {
+      this.publishLoading = true;
       this.$axios
         .$post("articles", { article: this.article })
         .then(({ article }) => {
           this.$router.push("/article/" + article.slug);
         })
         .finally(() => {
-          this.submitLoading = false;
+          this.publishLoading = false;
         });
     },
   },
 };
-</script>
-
-<style>
-</style>
+</script> 

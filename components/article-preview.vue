@@ -8,7 +8,7 @@
         <NuxtLink :to="'/@' + article.author.username" class="author">
           {{ article.author.username }}
         </NuxtLink>
-        <span class="date">{{ article.updatedAt }}</span>
+        <span class="date">{{ article.updatedAt | timeFilter }}</span>
       </div>
       <button
         :disabled="isSubmitting"
@@ -41,8 +41,6 @@
 </template>
 
 <script>
-// import MarkdownIt from "markdown-it";
-// const md = new MarkdownIt();
 export default {
   name: "ArticlePreview",
   props: { data: Object, require: true },
@@ -51,7 +49,6 @@ export default {
   },
   created() {
     this.article = this.data;
-    // this.article.body = md.render(this.article.body);
   },
   methods: {
     // 点赞

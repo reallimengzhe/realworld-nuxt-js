@@ -12,12 +12,11 @@
             <NuxtLink :to="'/@' + article.author.username" class="author">
               {{ article.author.username }}
             </NuxtLink>
-            <span class="date">{{ article.updatedAt }}</span>
+            <span class="date">{{ article.updatedAt | timeFilter }}</span>
           </div>
           <span v-if="UserInfo.username === article.author.username">
             <button
               class="btn btn-outline-secondary btn-sm"
-              ui-sref="app.editor({ slug: $ctrl.article.slug })"
               @click="$router.push('/editor?slug=' + article.slug)"
             >
               <i class="ion-edit"></i> Edit Article
@@ -45,7 +44,7 @@
               :disabled="favoriteLoading"
               :class="[
                 'btn',
-                'btn-sm ',
+                'btn-sm',
                 article.favorited ? 'btn-primary' : 'btn-outline-primary',
               ]"
               @click="handleLikeArticle(article, handleGetArticle)"
@@ -75,28 +74,49 @@
             <NuxtLink :to="'/@' + article.author.username" class="author">
               {{ article.author.username }}
             </NuxtLink>
-            <span class="date">January 20th</span>
+            <span class="date">{{ article.updatedAt | timeFilter }}</span>
           </div>
 
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="ion-plus-round"></i>
-            &nbsp; {{ article.author.following ? "Unfollow" : "Follow" }}
-            {{ article.author.username }}
-          </button>
-          &nbsp;
-          <button
-            :disabled="favoriteLoading"
-            :class="[
-              'btn',
-              'btn-sm ',
-              article.favorited ? 'btn-primary' : 'btn-outline-primary',
-            ]"
-            @click="handleLikeArticle(article, handleGetArticle)"
-          >
-            <i class="ion-heart"></i>
-            &nbsp; {{ article.favorited ? "Unfavorite" : "Favorite" }} Article
-            <span class="counter">({{ article.favoritesCount }})</span>
-          </button>
+          <span v-if="UserInfo.username === article.author.username">
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              @click="$router.push('/editor?slug=' + article.slug)"
+            >
+              <i class="ion-edit"></i> Edit Article
+            </button>
+
+            <button
+              class="btn btn-outline-danger btn-sm"
+              @click="handleDeleteArticle"
+            >
+              <i class="ion-trash-a"></i> Delete Article
+            </button>
+          </span>
+          <span v-if="UserInfo.username !== article.author.username">
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              :disabled="followLoading"
+              @click="handleFollowSomebody(article.author, handleGetArticle)"
+            >
+              <i class="ion-plus-round"></i>
+              &nbsp; {{ article.author.following ? "Unfollow" : "Follow" }}
+              {{ article.author.username }}
+            </button>
+            &nbsp;
+            <button
+              :disabled="favoriteLoading"
+              :class="[
+                'btn',
+                'btn-sm',
+                article.favorited ? 'btn-primary' : 'btn-outline-primary',
+              ]"
+              @click="handleLikeArticle(article, handleGetArticle)"
+            >
+              <i class="ion-heart"></i>
+              &nbsp; {{ article.favorited ? "Unfavorite" : "Favorite" }} Article
+              <span class="counter">({{ article.favoritesCount }})</span>
+            </button>
+          </span>
         </div>
       </div>
 
@@ -143,7 +163,9 @@
               >
                 {{ comment.author.username }}
               </NuxtLink>
-              <span class="date-posted">{{ comment.updatedAt }}</span>
+              <span class="date-posted">{{
+                comment.updatedAt | timeFilter
+              }}</span>
               <span class="mod-options">
                 <i
                   class="ion-trash-a"
@@ -161,8 +183,8 @@
 
 <script>
 import { mapState } from "vuex";
-import FollowMixin from "~/plugins/follow";
-import FavoriteMixin from "~/plugins/favorite";
+import FollowMixin from "~/plugins/follow-mixin";
+import FavoriteMixin from "~/plugins/favorite-mixin";
 import MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
 
@@ -178,6 +200,14 @@ export default {
     } catch {
       redirect("/");
     }
+  },
+  head() {
+    return {
+      title: `${this.article.title} - Realworld`,
+      meta: [
+        { hid: this.slug, name: "description", content: this.article.body },
+      ],
+    };
   },
   data() {
     return {
@@ -204,6 +234,7 @@ export default {
     async handleGetArticle() {
       const { article } = await this.$axios.$get(`articles/${this.slug}`);
       article.body = md.render(article.body);
+
       this.article = article;
     },
     // 获取评论

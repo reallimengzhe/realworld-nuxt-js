@@ -31,7 +31,7 @@
 
 <script>
 import { mapState } from "vuex";
-import FollowMixin from "~/plugins/follow";
+import FollowMixin from "~/plugins/follow-mixin";
 export default {
   name: "AuthorBanner",
   props: { author: String },
